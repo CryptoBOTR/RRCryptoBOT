@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RR калькулятор</title>
+    <style>
+        body { font-family: sans-serif; background: #121212; color: #fff; padding: 20px; }
+        input, select { padding: 10px; width: 100%; margin-bottom: 10px; border-radius: 5px; border: none; }
+        button { padding: 10px; background: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer; width: 100%; }
+        .result { margin-top: 20px; padding: 15px; background: #1e1e1e; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h2>📊 Калькулятор Risk/Reward</h2>
+    <label>Депозит ($):</label><input type="number" id="deposit">
+    <label>Ризик % на угоду:</label><input type="number" id="risk_percent">
+    <label>Ціна входу:</label><input type="number" id="entry_price">
+    <label>Ціна стоп-лосу:</label><input type="number" id="stop_price">
+    <label>R:R співвідношення:</label><input type="number" id="rr_ratio" value="3">
+    <button onclick="calculate()">Розрахувати</button>
+    <div class="result" id="result"></div>
+
+    <script>
+        function calculate() {
+            let deposit = parseFloat(document.getElementById('deposit').value);
+            let riskPercent = parseFloat(document.getElementById('risk_percent').value);
+            let entry = parseFloat(document.getElementById('entry_price').value);
+            let stop = parseFloat(document.getElementById('stop_price').value);
+            let rr = parseFloat(document.getElementById('rr_ratio').value);
+
+            let riskAmount = deposit * (riskPercent / 100);
+            let stopDistance = Math.abs(entry - stop);
+            let takeProfit = entry + (entry > stop ? stopDistance * rr : -stopDistance * rr);
+            let rewardAmount = riskAmount * rr;
+
+            document.getElementById('result').innerHTML = `
+                💰 Ризик: $${riskAmount.toFixed(2)}<br>
+                🎯 Потенційний прибуток: $${rewardAmount.toFixed(2)}<br>
+                📉 Стоп-лосс: ${stop}<br>
+                📈 Тейк-профіт: ${takeProfit.toFixed(5)}
+            `;
+        }
+    </script>
+</body>
+</html>
